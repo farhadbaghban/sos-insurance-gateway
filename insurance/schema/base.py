@@ -1,5 +1,8 @@
+import sys
+from config.settings import BASE_DIR
+sys.path.append(f"{BASE_DIR}/schema")
 from typing import Dict, List, Any
-from ...schema.models import DynamicCategory
+from schema.models import DynamicCategory
 
 
 def get_dynamic_schema_for_serializer(schema_name: str):

@@ -14,35 +14,51 @@ FIELD_TYPE_MAP = {
 }
 
 
+def create_dynamic_serializer_class(class_name):
+    dynamic_class = type(f"{class_name}Serializer", (serializers.Serializer,), {})
+
+    return dynamic_class
+
+
 def declare_serializer_fields(
     field_list: List[Dict[str, Any]], category: str
 ) -> Type[serializers.Serializer]:
-    fields = {}
+    read_only_fields = {"id", "created_at", "updated_at", "is_deleted"}
+    serializer_class = create_dynamic_serializer_class(category)
     for field in field_list:
+        name = field.get("name")
+        mapped_name = field.get("mapped_name")
+        required = field.get("required", False)
+        default = field.get("default_value")
         data_type = field.get("data_type")
+
         field_type_class = FIELD_TYPE_MAP.get(data_type)
         if not field_type_class:
-            raise ValidationError(
+            raise serializers.ValidationError(
                 f"Unsupported data type: '{data_type}' in category '{category}'"
             )
-        field_kwargs = {
-            "required": field.get("required", False),
-            "source": field.get("name"),
-        }
 
-        default = field.get("default_value")
-        if default is not None:
-            field_kwargs["default"] = default
+        field_kwargs = {}
+        if mapped_name in read_only_fields:
+            field_kwargs["read_only"] = True
+        else:
+            field_kwargs["required"] = required
+            if not required and default is not None:
+                field_kwargs["default"] = default
 
-        fields[field["mapped_name"]] = field_type_class(**field_kwargs)
+        if name != mapped_name:
+            field_kwargs["source"] = name
 
-    return type(f"{category.capitalize()}Serializer", (serializers.Serializer,), fields)
+        setattr(serializer_class, mapped_name, field_type_class(**field_kwargs))
+
+    return serializer_class
 
 
 def generate_serializer_class(
     field_map: Dict[str, List[Dict[str, Any]]],
 ) -> Type[serializers.Serializer]:
-    nested_serializers = {}
+    class DynamicInputSerializer(serializers.Serializer):
+        pass
 
     for category, field_list in field_map.items():
         if not isinstance(field_list, list):
@@ -51,6 +67,5 @@ def generate_serializer_class(
             )
 
         nested_serializer_class = declare_serializer_fields(field_list, category)
-        nested_serializers[category] = nested_serializer_class()
-
-    return type("DynamicInputSerializer", (serializers.Serializer,), nested_serializers)
+        setattr(DynamicInputSerializer, category, nested_serializer_class)
+    return DynamicInputSerializer

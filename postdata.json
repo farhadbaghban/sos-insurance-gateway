@@ -1,0 +1,35 @@
+{
+  "InsuredUser": {
+    "name": "Ali",
+    "family_name": "Rezaei",
+    "email": "ali.rezaei@example.com",
+    "id_card_number": "1234567890",
+    "birthday": "1990-01-01",
+    "father_name": "Hossein",
+    "birthday_city": "Tehran",
+    "phone_number": "+989121234567"
+  },
+  "InsuranceCompany": {
+    "name": "saman",
+    "unique_code": "123"
+  },
+  "EmployerCompany": {
+    "name": "Shahrzaad Co",
+    "unique_code": "EMP456",
+    "company": 123
+  },
+  "PolicyType": {
+    "name": "Life Insurance",
+    "unique_code": "LIFE2024"
+  },
+  "InsurancePolicy": {
+    "start_time": "2024-01-01",
+    "end_time": "2025-01-01",
+    "accepted_date": "2024-01-10",
+    "unique_code": "POL789",
+    "user": "1234567890",
+    "company": 123,
+    "employer": "EMP456",
+    "type": "LIFE2024"
+  }
+}

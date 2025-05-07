@@ -15,21 +15,21 @@
   },
   "EmployerCompany": {
     "name": "Shahrzaad Co",
-    "unique_code": "EMP456",
+    "unique_code": "456",
     "company": 123
   },
   "PolicyType": {
     "name": "Life Insurance",
-    "unique_code": "LIFE2024"
+    "unique_code": "2024"
   },
   "InsurancePolicy": {
     "start_time": "2024-01-01",
     "end_time": "2025-01-01",
     "accepted_date": "2024-01-10",
     "unique_code": "POL789",
-    "user": "1234567890",
+    "user": 1234567890,
     "company": 123,
-    "employer": "EMP456",
-    "type": "LIFE2024"
+    "employer": 456,
+    "type": 2024
   }
 }

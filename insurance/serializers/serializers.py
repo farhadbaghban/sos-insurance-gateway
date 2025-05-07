@@ -3,7 +3,6 @@ from typing import Any, Dict, List, Type
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-
 FIELD_TYPE_MAP = {
     "string": serializers.CharField,
     "integer": serializers.IntegerField,
@@ -48,9 +47,9 @@ def declare_serializer_fields(
 
         if name != mapped_name:
             field_kwargs["source"] = name
-
-        setattr(serializer_class, mapped_name, field_type_class(**field_kwargs))
-
+        serializer_class._declared_fields[mapped_name] = field_type_class(
+            **field_kwargs
+        )
     return serializer_class
 
 
@@ -67,5 +66,5 @@ def generate_serializer_class(
             )
 
         nested_serializer_class = declare_serializer_fields(field_list, category)
-        setattr(DynamicInputSerializer, category, nested_serializer_class)
+        DynamicInputSerializer._declared_fields[category] = nested_serializer_class()
     return DynamicInputSerializer

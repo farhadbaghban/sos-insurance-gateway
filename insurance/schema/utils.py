@@ -44,3 +44,5 @@ def map_and_validate_input(field_map: Dict[str, List[Dict[str, Any]]], input_dat
 
     if errors:
         raise ValidationError(errors)
+    else:
+        return True

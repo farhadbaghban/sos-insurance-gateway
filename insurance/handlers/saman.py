@@ -1,6 +1,7 @@
 from .base import BaseHandler
 from ..schema.base import get_dynamic_schema_for_serializer
-from ..serializers import generate_serializer_class
+
+from ..serializers.serializers import generate_serializer_class
 from ..schema.utils import map_and_validate_input
 from ..insurance_processing.step_insurance_processor import StepInsuranceProcessor
 from rest_framework.exceptions import ValidationError
@@ -19,7 +20,7 @@ class SamanHandler(BaseHandler):
         except ValidationError as e:
             raise e
         except Exception as e:
-            raise ValidationError({"non_field_error": str(e)})
+            raise ValidationError({"non_field_error in Saman Handler": str(e)})
 
     def save(self):
         return StepInsuranceProcessor(

@@ -5,6 +5,9 @@ set -e
 echo "Applying database migrations..."
 python manage.py migrate --noinput
 
+echo "Add superuser ....."
+python manage.py create_default_superuser
+
 echo "Create First schema Fields..."
 python manage.py create_dynamic_fields
 
